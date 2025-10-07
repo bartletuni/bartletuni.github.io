@@ -308,7 +308,6 @@
 		.hidden {
 			display: none !important;
 		}
-		/* Quantity dropdown lighter background */
         .edit-qty {
             background: #2d3347 !important;
             color: var(--text) !important;
@@ -320,6 +319,16 @@
             color: var(--text) !important;
             border: 1px solid #393e54 !important;
         }
+		/* Match sell fields and QTY dropdown size */
+		.edit-qty,
+		.sell-form input.sell-qty,
+		.sell-form input.sell-price {
+			width: 60px !important;
+			height: 2.4em !important;
+			font-size: 1.1em !important;
+			box-sizing: border-box;
+			padding: 0.8rem 1rem;
+		}
 	</style>
 </head>
 <body>
