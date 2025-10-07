@@ -463,7 +463,9 @@
                             <button type="submit" title="Sell" style="font-size:1.3em; padding:0.3em 0.7em;"><span aria-label="Sell" role="img">💸</span></button>
                         </form>
                     </td>
-                    <td><button class="delete-btn" data-idx="${idx}" style="background:transparent; color:#f87171; font-size:1.2em; padding:0.1em 0.4em; min-width:unset;">❌</button></td>
+                    <td style="text-align:center;">
+                        <button class="delete-btn" data-idx="${idx}" style="background:transparent; color:#f87171; font-size:1.2em; padding:0.1em 0.4em; min-width:unset; display:inline-flex; align-items:center; justify-content:center;">❌</button>
+                    </td>
                 `;
                 table.appendChild(row);
             });
