@@ -360,13 +360,13 @@
 			<h2>Current Inventory</h2>
 			<div class="table-bubble">
 				<table id="inventory-table" style="table-layout: fixed; width: 100%;">
-					<tr>
-						<th style="width: 26%;">Item</th>
-						<th style="width: 18%;">Qty</th>
-						<th style="width: 18%;">Cost</th>
-						<th style="width: 18%;">Delete</th>
-						<th style="width: 20%;">Sell</th>
-					</tr>
+            <tr>
+                <th style="width: 26%;">Item</th>
+                <th style="width: 12%;">QTY</th>
+                <th style="width: 22%;">Cost</th>
+                <th style="width: 25%;">Sell</th>
+                <th style="width: 15%;">Delete</th>
+            </tr>
 				</table>
 			</div>
 			<div class="bubble-card" style="margin-top:1rem;">
@@ -432,59 +432,65 @@
 		}
 
 		function renderInventory() {
-			const data = loadData();
-			const table = document.getElementById("inventory-table");
-			table.innerHTML = "<tr><th>Item</th><th>Quantity</th><th>Cost/Item</th><th>Delete</th><th>Sell</th></tr>";
-					data.items.forEach((item, idx) => {
-						const row = document.createElement("tr");
-						// Create dropdown for quantity
-						let qtyOptions = '';
-						for (let i = 1; i <= Math.max(item.quantity, 1); i++) {
-							qtyOptions += `<option value="${i}"${i === item.quantity ? ' selected' : ''}>${i}</option>`;
-						}
-						row.innerHTML = `
-							<td>${item.name}</td>
-							<td>
-								<select class="edit-qty" data-idx="${idx}">
-									${qtyOptions}
-								</select>
-							</td>
-							<td>$${item.cost ? Number(item.cost).toFixed(2) : '0.00'}</td>
-							<td><button class="delete-btn" data-idx="${idx}">Delete</button></td>
-							<td>
-								<form class="sell-form" data-idx="${idx}" style="display:flex;gap:0.5rem;align-items:center;">
-									<input type="number" class="sell-qty" min="1" max="${item.quantity}" value="1" style="width:50px;" required />
-									<input type="number" class="sell-price" min="0" step="0.01" placeholder="$" style="width:60px;" required />
-									<button type="submit" title="Sell"><span aria-label="Sell" role="img">💸</span></button>
-								</form>
-							</td>
-						`;
-						table.appendChild(row);
-					});
-					// Attach quantity dropdown handlers
-					table.querySelectorAll('.edit-qty').forEach(sel => {
-						sel.onchange = function() {
-							const idx = Number(this.getAttribute('data-idx'));
-							const newQty = Number(this.value);
-							const data = loadData();
-							if (data.items[idx]) {
-								data.items[idx].quantity = newQty;
-								data.history.push({
-									timestamp: Date.now(),
-									action: 'Quantity Edited',
-									name: data.items[idx].name,
-									quantity: newQty,
-									cost: data.items[idx].cost || 0,
-									sale: '',
-									profit: ''
-								});
-								saveData(data);
-								renderInventory();
-								renderHistory();
-								updateTotals();
-							}
-						};
-					});
+            const data = loadData();
+            const table = document.getElementById("inventory-table");
+            table.innerHTML = `<tr>
+                <th style="width: 26%;">Item</th>
+                <th style="width: 12%;">QTY</th>
+                <th style="width: 22%;">Cost</th>
+                <th style="width: 25%;">Sell</th>
+                <th style="width: 15%;">Delete</th>
+            </tr>`;
+            data.items.forEach((item, idx) => {
+                const row = document.createElement("tr");
+                // Create dropdown for quantity
+                let qtyOptions = '';
+                for (let i = 1; i <= Math.max(item.quantity, 1); i++) {
+                    qtyOptions += `<option value="${i}"${i === item.quantity ? ' selected' : ''}>${i}</option>`;
+                }
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>
+                        <select class="edit-qty" data-idx="${idx}">
+                            ${qtyOptions}
+                        </select>
+                    </td>
+                    <td>$${item.cost ? Number(item.cost).toFixed(2) : '0.00'}</td>
+                    <td>
+                        <form class="sell-form" data-idx="${idx}" style="display:flex;gap:0.7rem;align-items:center;">
+                            <input type="number" class="sell-qty" min="1" max="${item.quantity}" value="1" style="width:60px; height:2.1em; font-size:1.1em;" required />
+                            <input type="number" class="sell-price" min="0" step="0.01" placeholder="$" style="width:70px; height:2.1em; font-size:1.1em;" required />
+                            <button type="submit" title="Sell" style="font-size:1.3em; padding:0.3em 0.7em;"><span aria-label="Sell" role="img">💸</span></button>
+                        </form>
+                    </td>
+                    <td><button class="delete-btn" data-idx="${idx}" style="background:transparent; color:#f87171; font-size:1.2em; padding:0.1em 0.4em; min-width:unset;">❌</button></td>
+                `;
+                table.appendChild(row);
+            });
+            // Attach quantity dropdown handlers
+            table.querySelectorAll('.edit-qty').forEach(sel => {
+				sel.onchange = function() {
+					const idx = Number(this.getAttribute('data-idx'));
+					const newQty = Number(this.value);
+					const data = loadData();
+					if (data.items[idx]) {
+						data.items[idx].quantity = newQty;
+						data.history.push({
+							timestamp: Date.now(),
+							action: 'Quantity Edited',
+							name: data.items[idx].name,
+							quantity: newQty,
+							cost: data.items[idx].cost || 0,
+							sale: '',
+							profit: ''
+						});
+						saveData(data);
+						renderInventory();
+						renderHistory();
+						updateTotals();
+					}
+				};
+			});
 			// Attach delete handlers
 			table.querySelectorAll('.delete-btn').forEach(btn => {
 				btn.onclick = function() {
