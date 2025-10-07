@@ -436,10 +436,10 @@
             const table = document.getElementById("inventory-table");
             table.innerHTML = `<tr>
                 <th style="width: 26%;">Item</th>
-                <th style="width: 12%;">QTY</th>
-                <th style="width: 22%;">Cost</th>
-                <th style="width: 25%;">Sell</th>
-                <th style="width: 15%;">Delete</th>
+                <th style="width: 12%">QTY</th>
+                <th style="width: 22%">Cost</th>
+                <th style="width: 25%">Sell</th>
+                <th style="width: 15%">Delete</th>
             </tr>`;
             data.items.forEach((item, idx) => {
                 const row = document.createElement("tr");
@@ -448,17 +448,22 @@
                 for (let i = 1; i <= Math.max(item.quantity, 1); i++) {
                     qtyOptions += `<option value="${i}"${i === item.quantity ? ' selected' : ''}>${i}</option>`;
                 }
-                // Colorize item name if it contains a hyphen and a valid CSS color
+                // Colorize item name if original input had a hyphen and color
                 let displayName = item.name;
                 let colorStyle = '';
-                if (/-/.test(item.name)) {
-                    const parts = item.name.split('-');
-                    const color = parts[parts.length - 1].trim().toLowerCase();
-                    // Basic CSS color validation (named or hex)
-                    if (/^#[0-9a-f]{3,6}$/.test(color) || /^(red|blue|green|yellow|orange|purple|pink|black|white|gray|grey|brown|cyan|magenta|lime|teal|navy|maroon|olive|aqua|fuchsia|silver|gold)$/i.test(color)) {
-                        displayName = item.name.replace(/-(?!.*-).*/, '');
-                        colorStyle = ` style=\"color:${color};font-weight:bold;\"`;
-                    }
+                // Try to find a matching history entry for this item with a color
+                let color = null;
+                const colorHistory = (loadData().history || []).find(h => h.name === item.name && /-(\w+)$/.test(h.action === 'Added' || h.action === 'Updated' ? h.name : ''));
+                if (colorHistory) {
+                    const match = colorHistory.name.match(/-(\w+)$/);
+                    if (match) color = match[1].toLowerCase();
+                }
+                // Fallback: try to extract color from item name if it still has a hyphen
+                if (!color && /-(\w+)$/.test(item.name)) {
+                    color = item.name.match(/-(\w+)$/)[1].toLowerCase();
+                }
+                if (color && (/^#[0-9a-f]{3,6}$/.test(color) || /^(red|blue|green|yellow|orange|purple|pink|black|white|gray|grey|brown|cyan|magenta|lime|teal|navy|maroon|olive|aqua|fuchsia|silver|gold)$/i.test(color))) {
+                    colorStyle = ` style=\"color:${color};font-weight:bold;\"`;
                 }
                 row.innerHTML = `
                     <td><span${colorStyle}>${displayName}</span></td>
