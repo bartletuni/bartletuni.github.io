@@ -554,7 +554,8 @@
 						quantity: qty,
 						cost: cost.toFixed(2),
 						sale: price.toFixed(2),
-						profit: profit.toFixed(2)
+						profit: profit.toFixed(2),
+						color: item.color || ''
 					});
 					data.sales = (data.sales || 0) + totalSale;
 					data.profit = (data.profit || 0) + profit;
@@ -572,11 +573,22 @@
 			const table = document.getElementById("history-table");
 			table.innerHTML = "<tr><th>Timestamp</th><th>Action</th><th>Item</th><th>Quantity</th><th>Cost</th><th>Sale Price</th><th>Profit</th></tr>";
 			data.history.slice().reverse().forEach(entry => {
+				if (entry.action !== 'Sold') return;
+				// Use color property if present and valid
+				let colorStyle = '';
+				if (entry.color) {
+					const test = document.createElement('span');
+					test.style.color = '';
+					test.style.color = entry.color;
+					if (test.style.color) {
+						colorStyle = ` style=\"color:${entry.color};font-weight:bold;\"`;
+					}
+				}
 				const row = document.createElement("tr");
 				row.innerHTML = `
 					<td>${new Date(entry.timestamp).toLocaleString()}</td>
 					<td>${entry.action}</td>
-					<td>${entry.name}</td>
+					<td><span${colorStyle}>${entry.name}</span></td>
 					<td>${entry.quantity}</td>
 					<td>${entry.cost !== undefined ? ('$' + Number(entry.cost).toFixed(2)) : ''}</td>
 					<td>${entry.sale !== undefined && entry.sale !== '' ? ('$' + Number(entry.sale).toFixed(2)) : ''}</td>
