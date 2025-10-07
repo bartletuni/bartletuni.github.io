@@ -352,6 +352,10 @@
 					Cost to Produce (per item):
 					<input name="cost" type="number" id="item-cost" required min="0" step="any" inputmode="decimal" pattern="[0-9]+([\.,][0-9]+)?" />
 				</label>
+				<label>
+					Item Name Color (optional):
+					<input name="color" type="text" id="item-color" placeholder="e.g. orange or #ff9900" autocomplete="off" />
+				</label>
 				<button type="submit">Add/Update</button>
 			</form>
 			<div class="success" id="add-success" style="display:none"></div>
@@ -448,32 +452,18 @@
                 for (let i = 1; i <= Math.max(item.quantity, 1); i++) {
                     qtyOptions += `<option value="${i}"${i === item.quantity ? ' selected' : ''}>${i}</option>`;
                 }
-                // Colorize item name if original input had a hyphen and color
-                let displayName = item.name;
+                // Use color property if present and valid
                 let colorStyle = '';
-                // Find the most recent history entry for this item that was Added/Updated and had a color
-                let color = null;
-                const colorEntry = [...(data.history || [])].reverse().find(h => {
-                    if ((h.action === 'Added' || h.action === 'Updated') && h.name && h.name.toLowerCase().startsWith(item.name.toLowerCase() + '-')) {
-                        const match = h.name.match(/-(#[0-9a-fA-F]{3,6}|[a-zA-Z]+)$/);
-                        if (match) {
-                            color = match[1];
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-                if (color) {
-                    // Test if color is valid by creating a dummy element
+                if (item.color) {
                     const test = document.createElement('span');
                     test.style.color = '';
-                    test.style.color = color;
+                    test.style.color = item.color;
                     if (test.style.color) {
-                        colorStyle = ` style=\"color:${color};font-weight:bold;\"`;
+                        colorStyle = ` style=\"color:${item.color};font-weight:bold;\"`;
                     }
                 }
                 row.innerHTML = `
-                    <td><span${colorStyle}>${displayName}</span></td>
+                    <td><span${colorStyle}>${item.name}</span></td>
                     <td>
                         <select class="edit-qty" data-idx="${idx}">
                             ${qtyOptions}
@@ -624,6 +614,7 @@
 			let name = document.getElementById("item-name").value.trim();
 			const quantity = parseInt(document.getElementById("item-quantity").value, 10);
 			const cost = parseFloat(document.getElementById("item-cost").value);
+			const color = document.getElementById("item-color").value.trim();
 			if (!name || isNaN(quantity) || isNaN(cost)) {
 				document.getElementById("add-success").style.display = "";
 				document.getElementById("add-success").textContent = "Invalid item name, quantity, or cost.";
@@ -639,9 +630,10 @@
 			if (item) {
 				item.quantity = quantity;
 				item.cost = cost;
+				item.color = color;
 				action = "Updated";
 			} else {
-				data.items.push({ name, quantity, cost });
+				data.items.push({ name, quantity, cost, color });
 			}
 			data.history.push({
 				timestamp: Date.now(),
@@ -650,7 +642,8 @@
 				quantity,
 				cost: cost.toFixed(2),
 				sale: '',
-				profit: ''
+				profit: '',
+				color
 			});
 			saveData(data);
 			renderInventory();
@@ -660,6 +653,7 @@
 			document.getElementById("item-name").value = "";
 			document.getElementById("item-quantity").value = "";
 			document.getElementById("item-cost").value = "";
+			document.getElementById("item-color").value = "";
 		});
 
 		document.getElementById("logout-form").addEventListener("submit", function(e) {
