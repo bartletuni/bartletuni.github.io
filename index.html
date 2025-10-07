@@ -435,7 +435,7 @@
             const data = loadData();
             const table = document.getElementById("inventory-table");
             table.innerHTML = `<tr>
-                <th style="width: 26%;">Item</th>
+                <th style="width: 26%">Item</th>
                 <th style="width: 12%">QTY</th>
                 <th style="width: 22%">Cost</th>
                 <th style="width: 25%">Sell</th>
@@ -451,17 +451,18 @@
                 // Colorize item name if original input had a hyphen and color
                 let displayName = item.name;
                 let colorStyle = '';
-                // Try to find a matching history entry for this item with a color
+                // Find the most recent history entry for this item that was Added/Updated and had a color
                 let color = null;
-                const colorHistory = (loadData().history || []).find(h => h.name === item.name && /-(\w+)$/.test(h.action === 'Added' || h.action === 'Updated' ? h.name : ''));
-                if (colorHistory) {
-                    const match = colorHistory.name.match(/-(\w+)$/);
-                    if (match) color = match[1].toLowerCase();
-                }
-                // Fallback: try to extract color from item name if it still has a hyphen
-                if (!color && /-(\w+)$/.test(item.name)) {
-                    color = item.name.match(/-(\w+)$/)[1].toLowerCase();
-                }
+                const colorEntry = [...(data.history || [])].reverse().find(h => {
+                    if ((h.action === 'Added' || h.action === 'Updated') && h.name && h.name.toLowerCase().startsWith(item.name.toLowerCase() + '-')) {
+                        const match = h.name.match(/-(#[0-9a-fA-F]{3,6}|[a-zA-Z]+)$/);
+                        if (match) {
+                            color = match[1].toLowerCase();
+                            return true;
+                        }
+                    }
+                    return false;
+                });
                 if (color && (/^#[0-9a-f]{3,6}$/.test(color) || /^(red|blue|green|yellow|orange|purple|pink|black|white|gray|grey|brown|cyan|magenta|lime|teal|navy|maroon|olive|aqua|fuchsia|silver|gold)$/i.test(color))) {
                     colorStyle = ` style=\"color:${color};font-weight:bold;\"`;
                 }
