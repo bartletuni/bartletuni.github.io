@@ -21,6 +21,7 @@
 			font-family: 'Segoe UI', 'Arial', sans-serif;
 			margin: 0;
 			min-height: 100vh;
+			text-align: center;
 		}
 		.center {
 			min-height: 100vh;
@@ -144,13 +145,13 @@
 			border-collapse: separate;
 			border-spacing: 0;
 		}
-		   th, td {
-			   padding: 0.5rem 0.2rem;
-			   text-align: center;
-			   overflow: hidden;
-			   text-overflow: ellipsis;
-			   white-space: nowrap;
-		   }
+		th, td {
+			padding: 0.5rem 0.2rem;
+			text-align: center;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 		th {
 			background: var(--accent2);
 			color: #181c24;
@@ -320,9 +321,7 @@
             border: 1px solid #393e54 !important;
         }
 		/* Compact and consistent size for QTY and Sell fields */
-		.edit-qty,
-		.sell-form input.sell-qty,
-		.sell-form input.sell-price {
+		.edit-qty {
 			width: 38px !important;
 			min-width: 38px !important;
 			max-width: 38px !important;
@@ -331,10 +330,18 @@
 			box-sizing: border-box;
 			padding: 0.1rem 0.2rem !important;
 		}
+		.sell-form input.sell-qty,
+		.sell-form input.sell-price {
+			width: 27px !important;
+			min-width: 27px !important;
+			max-width: 27px !important;
+			height: 1.7em !important;
+			font-size: 1em !important;
+			box-sizing: border-box;
+			padding: 0.1rem 0.2rem !important;
+		}
 		@media (max-width: 900px) {
-			.edit-qty,
-			.sell-form input.sell-qty,
-			.sell-form input.sell-price {
+			.edit-qty {
 				width: 32px !important;
 				min-width: 32px !important;
 				max-width: 32px !important;
@@ -342,14 +349,30 @@
 				font-size: 0.95em !important;
 				padding: 0.05rem 0.1rem !important;
 			}
-		}
-		@media (max-width: 600px) {
-			.edit-qty,
 			.sell-form input.sell-qty,
 			.sell-form input.sell-price {
+				width: 19px !important;
+				min-width: 19px !important;
+				max-width: 19px !important;
+				height: 1.3em !important;
+				font-size: 0.95em !important;
+				padding: 0.05rem 0.1rem !important;
+			}
+		}
+		@media (max-width: 600px) {
+			.edit-qty {
 				width: 28px !important;
 				min-width: 28px !important;
 				max-width: 28px !important;
+				height: 1.1em !important;
+				font-size: 0.9em !important;
+				padding: 0.01rem 0.05rem !important;
+			}
+			.sell-form input.sell-qty,
+			.sell-form input.sell-price {
+				width: 13px !important;
+				min-width: 13px !important;
+				max-width: 13px !important;
 				height: 1.1em !important;
 				font-size: 0.9em !important;
 				padding: 0.01rem 0.05rem !important;
