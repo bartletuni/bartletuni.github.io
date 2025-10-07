@@ -462,25 +462,25 @@
                         colorStyle = ` style=\"color:${item.color};font-weight:bold;\"`;
                     }
                 }
-                row.innerHTML = `
-                    <td><span${colorStyle}>${item.name}</span></td>
-                    <td>
-                        <select class="edit-qty" data-idx="${idx}">
-                            ${qtyOptions}
-                        </select>
-                    </td>
-                    <td>$${item.cost ? Number(item.cost).toFixed(2) : '0.00'}</td>
-                    <td>
-                        <form class="sell-form" data-idx="${idx}" style="display:flex;gap:0.7rem;align-items:center;">
-                            <input type="number" class="sell-qty" min="1" max="${item.quantity}" value="1" style="width:60px; height:2.1em; font-size:1.1em;" required />
-                            <input type="number" class="sell-price" min="0" step="0.01" placeholder="$" style="width:70px; height:2.1em; font-size:1.1em;" required />
-                            <button type="submit" title="Sell" style="font-size:1.3em; padding:0.3em 0.7em;"><span aria-label="Sell" role="img">💸</span></button>
-                        </form>
-                    </td>
-                    <td style="text-align:center;">
-                        <button class="delete-btn" data-idx="${idx}" style="background:transparent; color:#f87171; font-size:1.2em; padding:0.1em 0.4em; min-width:unset; display:inline-flex; align-items:center; justify-content:center;">❌</button>
-                    </td>
-                `;
+				row.innerHTML = `
+					<td><span${colorStyle}>${item.name}</span></td>
+					<td>
+						<select class="edit-qty" data-idx="${idx}">
+							${qtyOptions}
+						</select>
+					</td>
+					<td>$${item.cost ? Number(item.cost).toFixed(2) : '0.00'}</td>
+					<td>
+						<form class="sell-form" data-idx="${idx}" style="display:flex;gap:0.7rem;align-items:center;">
+							<input type="number" class="sell-qty" min="1" max="${item.quantity}" value="1" style="width:60px; height:2.4em; font-size:1.1em;" required />
+							<input type="number" class="sell-price" min="0" step="0.01" placeholder="$" style="width:60px; height:2.4em; font-size:1.1em;" required />
+							<button type="submit" title="Sell" style="font-size:1.3em; padding:0.3em 0.7em;"><span aria-label="Sell" role="img">💸</span></button>
+						</form>
+					</td>
+					<td style="text-align:center;">
+						<button class="delete-btn" data-idx="${idx}" style="background:transparent; color:#f87171; font-size:1.2em; padding:0.1em 0.4em; min-width:unset; display:inline-flex; align-items:center; justify-content:center;">❌</button>
+					</td>
+				`;
                 table.appendChild(row);
             });
             // Attach quantity dropdown handlers
