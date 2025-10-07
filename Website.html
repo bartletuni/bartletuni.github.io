@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TakomoCo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		:root {
+			--bg: #181c24;
+			--card: #23283a;
+			--accent: #5eead4;
+			--accent2: #a78bfa;
+			--text: #f3f4f6;
+			--danger: #f87171;
+			--bubble: 24px;
+			--bubble2: 16px;
+		}
+		html, body {
+			background: var(--bg);
+			color: var(--text);
+			font-family: 'Segoe UI', 'Arial', sans-serif;
+			margin: 0;
+			min-height: 100vh;
+		}
+		.center {
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		.bubble-card {
+			background: var(--card);
+			border-radius: var(--bubble);
+			box-shadow: 0 4px 32px #0006;
+			padding: 2.5rem 2rem 2rem 2rem;
+			min-width: 320px;
+			max-width: 1200px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-bottom: 2.5rem;
+		}
+		h1, h2 {
+			color: var(--accent2);
+			text-shadow: 0 2px 8px #0004;
+		}
+		h1 {
+			font-size: 2.2rem;
+			margin-bottom: 1.5rem;
+			letter-spacing: 2px;
+		}
+		h2 {
+			font-size: 1.3rem;
+			margin-top: 1.5rem;
+			margin-bottom: 1rem;
+		}
+		form {
+			display: flex;
+			flex-direction: column;
+			gap: 1.2rem;
+			width: 100%;
+		}
+		label {
+			font-size: 1.1rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+			input[type="password"], input[type="text"], input[type="number"], select {
+				border: none;
+				border-radius: var(--bubble2);
+				padding: 0.8rem 1rem;
+				font-size: 1.1rem;
+				background: #1e2230;
+				color: var(--text);
+				box-shadow: 0 2px 8px #0002;
+				outline: none;
+				transition: box-shadow 0.2s;
+				appearance: none;
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				cursor: pointer;
+			}
+			input[type="password"]:focus, input[type="text"]:focus, input[type="number"]:focus, select:focus {
+				box-shadow: 0 0 0 2px var(--accent);
+			}
+		select::-ms-expand {
+			display: none;
+		}
+		select option {
+			background: #23283a;
+			color: var(--text);
+		}
+		button {
+			background: linear-gradient(90deg, var(--accent), var(--accent2));
+			color: #181c24;
+			border: none;
+			border-radius: var(--bubble2);
+			padding: 0.9rem 1.2rem;
+			font-size: 1.1rem;
+			font-weight: bold;
+			cursor: pointer;
+			box-shadow: 0 2px 12px #0003;
+			transition: background 0.2s, transform 0.1s;
+		}
+		button:hover {
+			background: linear-gradient(90deg, var(--accent2), var(--accent));
+			transform: scale(1.04);
+		}
+		.error {
+			color: var(--danger);
+			margin-top: 1rem;
+			font-weight: bold;
+			text-align: center;
+			text-shadow: 0 1px 4px #0008;
+		}
+		.success {
+			color: var(--accent);
+			margin-top: 1rem;
+			font-weight: bold;
+			text-align: center;
+			text-shadow: 0 1px 4px #0008;
+		}
+			.container {
+				max-width: 1400px;
+				margin: 2.5rem auto;
+				padding: 0 2vw;
+			}
+		.table-bubble {
+			width: 100%;
+			background: #1e2230;
+			border-radius: var(--bubble2);
+			box-shadow: 0 2px 12px #0002;
+			margin-bottom: 2rem;
+			overflow-x: auto;
+		}
+		table {
+			width: 100%;
+			border-collapse: separate;
+			border-spacing: 0;
+		}
+		th, td {
+			padding: 0.8rem 1rem;
+			text-align: left;
+		}
+		th {
+			background: var(--accent2);
+			color: #181c24;
+			font-weight: bold;
+			border-top-left-radius: var(--bubble2);
+			border-top-right-radius: var(--bubble2);
+		}
+		tr:not(:last-child) td {
+			border-bottom: 1px solid #2d3347;
+		}
+		tr:last-child td {
+			border-bottom-left-radius: var(--bubble2);
+			border-bottom-right-radius: var(--bubble2);
+		}
+			@media (max-width: 900px) {
+				.container, .bubble-card {
+					padding: 0.5rem;
+					min-width: unset;
+					max-width: 100vw;
+				}
+				h1 {
+					font-size: 1.3rem;
+				}
+				h2 {
+					font-size: 1.05rem;
+				}
+				form, label {
+					font-size: 1rem;
+				}
+				table, th, td {
+					font-size: 0.95rem;
+					padding: 0.5rem 0.4rem;
+				}
+				.bubble-card {
+					margin-bottom: 1.2rem;
+				}
+				.logout-btn {
+					margin-top: 1rem;
+				}
+				.table-bubble {
+					margin-bottom: 1rem;
+				}
+				input[type="password"], input[type="text"], input[type="number"], select {
+					padding: 0.6rem 0.7rem;
+					font-size: 1rem;
+				}
+				button {
+					padding: 0.7rem 1rem;
+					font-size: 1rem;
+				}
+			}
+
+			@media (max-width: 600px) {
+				.container, .bubble-card {
+					padding: 0.2rem;
+					min-width: unset;
+					max-width: 100vw;
+				}
+				h1 {
+					font-size: 1.1rem;
+				}
+				h2 {
+					font-size: 0.95rem;
+				}
+				form, label {
+					font-size: 0.95rem;
+				}
+				table, th, td {
+					font-size: 0.9rem;
+					padding: 0.3rem 0.2rem;
+				}
+				.bubble-card {
+					margin-bottom: 0.7rem;
+				}
+				.logout-btn {
+					margin-top: 0.5rem;
+				}
+				.table-bubble {
+					margin-bottom: 0.5rem;
+				}
+				input[type="password"], input[type="text"], input[type="number"], select {
+					padding: 0.5rem 0.5rem;
+					font-size: 0.95rem;
+				}
+				button {
+					padding: 0.6rem 0.7rem;
+					font-size: 0.95rem;
+				}
+				th, td {
+					word-break: break-word;
+				}
+				.table-bubble {
+					overflow-x: auto;
+				}
+			}
+		.logout-btn {
+			margin-top: 2rem;
+			display: flex;
+			justify-content: flex-end;
+		}
+		.hidden {
+			display: none !important;
+		}
+	</style>
+</head>
+<body>
+	<div id="login-view" class="center">
+		<div class="bubble-card">
+			<h1>fipinventory.com</h1>
+			<form id="login-form" autocomplete="off">
+				<label>
+					Access Code:
+					<input type="password" name="access_code" id="access_code" required autocomplete="off" />
+				</label>
+				<button type="submit">Enter</button>
+			</form>
+			<div class="error" id="login-error" style="display:none"></div>
+		</div>
+	</div>
+	<div id="inventory-view" class="container hidden">
+		<div class="bubble-card">
+			<h1>Shop Inventory Management</h1>
+			<form id="add-form" autocomplete="off">
+				<label>
+					Item Name:
+					<input name="name" type="text" id="item-name" required autocomplete="off" />
+				</label>
+				<label>
+					Quantity:
+					<input name="quantity" type="number" id="item-quantity" required min="0" />
+				</label>
+				<label>
+					Cost to Produce (per item):
+					<input name="cost" type="number" id="item-cost" required min="0" step="any" inputmode="decimal" pattern="[0-9]+([\.,][0-9]+)?" />
+				</label>
+				<button type="submit">Add/Update</button>
+			</form>
+			<div class="success" id="add-success" style="display:none"></div>
+		</div>
+		<div class="bubble-card">
+			<h2>Current Inventory</h2>
+			<div class="table-bubble">
+				<table id="inventory-table">
+					<tr><th>Item</th><th>Quantity</th><th>Cost/Item</th><th>Delete</th><th>Sell</th></tr>
+				</table>
+			</div>
+			<div class="bubble-card" style="margin-top:1rem;">
+				<h2>Totals</h2>
+				<div id="totals">
+					<div>Total Inventory Cost: $<span id="total-inventory-cost">0.00</span></div>
+					<div>Total Sales: $<span id="total-sales">0.00</span></div>
+					<div>Total Profit: $<span id="total-profit">0.00</span></div>
+				</div>
+			</div>
+					<div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+						<h2 style="margin: 0;">Inventory History</h2>
+						<button id="clear-history-btn" style="margin-left: auto; background: var(--danger); color: #fff; font-size: 1rem; padding: 0.5rem 1.2rem; border-radius: var(--bubble2);">Clear History</button>
+					</div>
+					<div class="table-bubble">
+						<table id="history-table">
+							<tr><th>Timestamp</th><th>Action</th><th>Item</th><th>Quantity</th><th>Cost</th><th>Sale Price</th><th>Profit</th></tr>
+						</table>
+					</div>
+			<form id="logout-form" class="logout-btn">
+				<button type="submit">Logout</button>
+			</form>
+		</div>
+	</div>
+	<script>
+		// --- Simple in-browser "backend" for demo ---
+		const ACCESS_CODE = "030320";
+		const STORAGE_KEY = "fipinventory_data";
+		const SESSION_KEY = "fipinventory_loggedin";
+
+		function loadData() {
+			try {
+				return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { items: [], history: [], sales: 0, profit: 0 };
+			} catch (e) {
+				return { items: [], history: [], sales: 0, profit: 0 };
+			}
+		}
+		function saveData(data) {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+		}
+		function isLoggedIn() {
+			return localStorage.getItem(SESSION_KEY) === "1";
+		}
+		function setLoggedIn(val) {
+			if (val) localStorage.setItem(SESSION_KEY, "1");
+			else localStorage.removeItem(SESSION_KEY);
+		}
+
+		function showLogin(errorMsg = "") {
+			document.getElementById("login-view").classList.remove("hidden");
+			document.getElementById("inventory-view").classList.add("hidden");
+			document.getElementById("login-error").style.display = errorMsg ? "" : "none";
+			document.getElementById("login-error").textContent = errorMsg;
+			document.getElementById("access_code").value = "";
+		}
+		function showInventory(successMsg = "") {
+			document.getElementById("login-view").classList.add("hidden");
+			document.getElementById("inventory-view").classList.remove("hidden");
+			document.getElementById("add-success").style.display = successMsg ? "" : "none";
+			document.getElementById("add-success").textContent = successMsg;
+			renderInventory();
+			renderHistory();
+		}
+
+		function renderInventory() {
+			const data = loadData();
+			const table = document.getElementById("inventory-table");
+			table.innerHTML = "<tr><th>Item</th><th>Quantity</th><th>Cost/Item</th><th>Delete</th><th>Sell</th></tr>";
+					data.items.forEach((item, idx) => {
+						const row = document.createElement("tr");
+						// Create dropdown for quantity
+						let qtyOptions = '';
+						for (let i = 1; i <= Math.max(item.quantity, 1); i++) {
+							qtyOptions += `<option value="${i}"${i === item.quantity ? ' selected' : ''}>${i}</option>`;
+						}
+						row.innerHTML = `
+							<td>${item.name}</td>
+							<td>
+								<select class="edit-qty" data-idx="${idx}">
+									${qtyOptions}
+								</select>
+							</td>
+							<td>$${item.cost ? Number(item.cost).toFixed(2) : '0.00'}</td>
+							<td><button class="delete-btn" data-idx="${idx}">Delete</button></td>
+							<td>
+								<form class="sell-form" data-idx="${idx}" style="display:flex;gap:0.5rem;align-items:center;">
+									<input type="number" class="sell-qty" min="1" max="${item.quantity}" value="1" style="width:50px;" required />
+									<input type="number" class="sell-price" min="0" step="0.01" placeholder="$" style="width:60px;" required />
+									<button type="submit" title="Sell"><span aria-label="Sell" role="img">💸</span></button>
+								</form>
+							</td>
+						`;
+						table.appendChild(row);
+					});
+					// Attach quantity dropdown handlers
+					table.querySelectorAll('.edit-qty').forEach(sel => {
+						sel.onchange = function() {
+							const idx = Number(this.getAttribute('data-idx'));
+							const newQty = Number(this.value);
+							const data = loadData();
+							if (data.items[idx]) {
+								data.items[idx].quantity = newQty;
+								data.history.push({
+									timestamp: Date.now(),
+									action: 'Quantity Edited',
+									name: data.items[idx].name,
+									quantity: newQty,
+									cost: data.items[idx].cost || 0,
+									sale: '',
+									profit: ''
+								});
+								saveData(data);
+								renderInventory();
+								renderHistory();
+								updateTotals();
+							}
+						};
+					});
+			// Attach delete handlers
+			table.querySelectorAll('.delete-btn').forEach(btn => {
+				btn.onclick = function() {
+					const idx = Number(this.getAttribute('data-idx'));
+					const data = loadData();
+					const item = data.items[idx];
+					if (item) {
+						data.history.push({
+							timestamp: Date.now(),
+							action: 'Deleted',
+							name: item.name,
+							quantity: item.quantity,
+							cost: item.cost || 0,
+							sale: '',
+							profit: ''
+						});
+						data.items.splice(idx, 1);
+						saveData(data);
+						renderInventory();
+						renderHistory();
+						updateTotals();
+					}
+				};
+			});
+			// Attach sell handlers
+			table.querySelectorAll('.sell-form').forEach(form => {
+				form.onsubmit = function(e) {
+					e.preventDefault();
+					const idx = Number(this.getAttribute('data-idx'));
+					const qty = Number(this.querySelector('.sell-qty').value);
+					const price = Number(this.querySelector('.sell-price').value);
+					const data = loadData();
+					const item = data.items[idx];
+					if (!item || isNaN(qty) || qty < 1 || qty > item.quantity || isNaN(price) || price < 0) return;
+					const cost = Number(item.cost || 0);
+					const totalCost = cost * qty;
+					const totalSale = price * qty;
+					const profit = totalSale - totalCost;
+					item.quantity -= qty;
+					if (item.quantity === 0) data.items.splice(idx, 1);
+					data.history.push({
+						timestamp: Date.now(),
+						action: 'Sold',
+						name: item.name,
+						quantity: qty,
+						cost: cost.toFixed(2),
+						sale: price.toFixed(2),
+						profit: profit.toFixed(2)
+					});
+					data.sales = (data.sales || 0) + totalSale;
+					data.profit = (data.profit || 0) + profit;
+					saveData(data);
+					renderInventory();
+					renderHistory();
+					updateTotals();
+				};
+			});
+			updateTotals();
+		}
+
+		function renderHistory() {
+			const data = loadData();
+			const table = document.getElementById("history-table");
+			table.innerHTML = "<tr><th>Timestamp</th><th>Action</th><th>Item</th><th>Quantity</th><th>Cost</th><th>Sale Price</th><th>Profit</th></tr>";
+			data.history.slice().reverse().forEach(entry => {
+				const row = document.createElement("tr");
+				row.innerHTML = `
+					<td>${new Date(entry.timestamp).toLocaleString()}</td>
+					<td>${entry.action}</td>
+					<td>${entry.name}</td>
+					<td>${entry.quantity}</td>
+					<td>${entry.cost !== undefined ? ('$' + Number(entry.cost).toFixed(2)) : ''}</td>
+					<td>${entry.sale !== undefined && entry.sale !== '' ? ('$' + Number(entry.sale).toFixed(2)) : ''}</td>
+					<td>${entry.profit !== undefined && entry.profit !== '' ? ('$' + Number(entry.profit).toFixed(2)) : ''}</td>
+				`;
+				table.appendChild(row);
+			});
+		}
+
+		function updateTotals() {
+			const data = loadData();
+			// Inventory cost: sum of (quantity * cost) for all items
+			let totalInventoryCost = 0;
+			data.items.forEach(item => {
+				totalInventoryCost += (Number(item.quantity) * Number(item.cost || 0));
+			});
+			document.getElementById('total-inventory-cost').textContent = totalInventoryCost.toFixed(2);
+			document.getElementById('total-sales').textContent = (data.sales || 0).toFixed(2);
+			document.getElementById('total-profit').textContent = (data.profit || 0).toFixed(2);
+		}
+
+		document.getElementById("login-form").addEventListener("submit", function(e) {
+			e.preventDefault();
+			const code = document.getElementById("access_code").value;
+			if (code === ACCESS_CODE) {
+				setLoggedIn(true);
+				showInventory();
+			} else {
+				showLogin("Invalid access code.");
+			}
+		});
+
+		document.getElementById("add-form").addEventListener("submit", function(e) {
+			e.preventDefault();
+			const name = document.getElementById("item-name").value.trim();
+			const quantity = parseInt(document.getElementById("item-quantity").value, 10);
+			const cost = parseFloat(document.getElementById("item-cost").value);
+			if (!name || isNaN(quantity) || isNaN(cost)) {
+				document.getElementById("add-success").style.display = "";
+				document.getElementById("add-success").textContent = "Invalid item name, quantity, or cost.";
+				return;
+			}
+			const data = loadData();
+			let item = data.items.find(i => i.name.toLowerCase() === name.toLowerCase());
+			let action = "Added";
+			if (item) {
+				item.quantity = quantity;
+				item.cost = cost;
+				action = "Updated";
+			} else {
+				data.items.push({ name, quantity, cost });
+			}
+			data.history.push({
+				timestamp: Date.now(),
+				action,
+				name,
+				quantity,
+				cost: cost.toFixed(2),
+				sale: '',
+				profit: ''
+			});
+			saveData(data);
+			renderInventory();
+			renderHistory();
+			document.getElementById("add-success").style.display = "";
+			document.getElementById("add-success").textContent = `Item "${name}" ${action.toLowerCase()} successfully.`;
+			document.getElementById("item-name").value = "";
+			document.getElementById("item-quantity").value = "";
+			document.getElementById("item-cost").value = "";
+		});
+
+		document.getElementById("logout-form").addEventListener("submit", function(e) {
+			e.preventDefault();
+			setLoggedIn(false);
+			showLogin();
+		});
+
+		// On load, show correct view
+		if (isLoggedIn()) {
+			showInventory();
+		} else {
+			showLogin();
+		}
+		// Clear History button logic
+		document.addEventListener('DOMContentLoaded', function() {
+			const clearBtn = document.getElementById('clear-history-btn');
+			if (clearBtn) {
+				clearBtn.onclick = function() {
+					if (confirm('Are you sure you want to clear the inventory history? This cannot be undone.')) {
+						const data = loadData();
+						data.history = [];
+						saveData(data);
+						renderHistory();
+					}
+				};
+			}
+		});
+		</script>
+</body>
+</html>
