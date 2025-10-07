@@ -457,14 +457,20 @@
                     if ((h.action === 'Added' || h.action === 'Updated') && h.name && h.name.toLowerCase().startsWith(item.name.toLowerCase() + '-')) {
                         const match = h.name.match(/-(#[0-9a-fA-F]{3,6}|[a-zA-Z]+)$/);
                         if (match) {
-                            color = match[1].toLowerCase();
+                            color = match[1];
                             return true;
                         }
                     }
                     return false;
                 });
-                if (color && (/^#[0-9a-f]{3,6}$/.test(color) || /^(red|blue|green|yellow|orange|purple|pink|black|white|gray|grey|brown|cyan|magenta|lime|teal|navy|maroon|olive|aqua|fuchsia|silver|gold)$/i.test(color))) {
-                    colorStyle = ` style=\"color:${color};font-weight:bold;\"`;
+                if (color) {
+                    // Test if color is valid by creating a dummy element
+                    const test = document.createElement('span');
+                    test.style.color = '';
+                    test.style.color = color;
+                    if (test.style.color) {
+                        colorStyle = ` style=\"color:${color};font-weight:bold;\"`;
+                    }
                 }
                 row.innerHTML = `
                     <td><span${colorStyle}>${displayName}</span></td>
