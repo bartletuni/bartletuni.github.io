@@ -448,8 +448,20 @@
                 for (let i = 1; i <= Math.max(item.quantity, 1); i++) {
                     qtyOptions += `<option value="${i}"${i === item.quantity ? ' selected' : ''}>${i}</option>`;
                 }
+                // Colorize item name if it contains a hyphen and a valid CSS color
+                let displayName = item.name;
+                let colorStyle = '';
+                if (/-/.test(item.name)) {
+                    const parts = item.name.split('-');
+                    const color = parts[parts.length - 1].trim().toLowerCase();
+                    // Basic CSS color validation (named or hex)
+                    if (/^#[0-9a-f]{3,6}$/.test(color) || /^(red|blue|green|yellow|orange|purple|pink|black|white|gray|grey|brown|cyan|magenta|lime|teal|navy|maroon|olive|aqua|fuchsia|silver|gold)$/i.test(color)) {
+                        displayName = item.name.replace(/-(?!.*-).*/, '');
+                        colorStyle = ` style=\"color:${color};font-weight:bold;\"`;
+                    }
+                }
                 row.innerHTML = `
-                    <td>${item.name}</td>
+                    <td><span${colorStyle}>${displayName}</span></td>
                     <td>
                         <select class="edit-qty" data-idx="${idx}">
                             ${qtyOptions}
@@ -597,13 +609,17 @@
 
 		document.getElementById("add-form").addEventListener("submit", function(e) {
 			e.preventDefault();
-			const name = document.getElementById("item-name").value.trim();
+			let name = document.getElementById("item-name").value.trim();
 			const quantity = parseInt(document.getElementById("item-quantity").value, 10);
 			const cost = parseFloat(document.getElementById("item-cost").value);
 			if (!name || isNaN(quantity) || isNaN(cost)) {
 				document.getElementById("add-success").style.display = "";
 				document.getElementById("add-success").textContent = "Invalid item name, quantity, or cost.";
 				return;
+			}
+			// Remove hyphen and everything after for inventory storage
+			if (/-/.test(name)) {
+				name = name.replace(/-(?!.*-).*/, '');
 			}
 			const data = loadData();
 			let item = data.items.find(i => i.name.toLowerCase() === name.toLowerCase());
